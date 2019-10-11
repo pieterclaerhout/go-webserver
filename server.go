@@ -5,6 +5,7 @@ import (
 	"net/http"
 	"os"
 	"reflect"
+	"runtime"
 	"strings"
 
 	"github.com/labstack/echo"
@@ -23,10 +24,15 @@ type Server struct {
 
 // New returns a new Server instacce
 func New() *Server {
+
+	runtime.GOMAXPROCS(runtime.NumCPU())
+	log.PrintTimestamp = true
+
 	return &Server{
 		DefaultPort: ":8080",
 		modules:     []Module{},
 	}
+
 }
 
 // Start starts the webserver on the indicated port
