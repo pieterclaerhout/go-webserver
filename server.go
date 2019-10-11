@@ -43,6 +43,8 @@ func New() *Server {
 // Start starts the webserver on the indicated port
 func (server *Server) Start() error {
 
+	jobqueue.Default().Start(server.JobQueuePoolSize, server.JobQueueConcurrency)
+
 	server.engine = echo.New()
 	server.engine.HideBanner = true
 	server.engine.Debug = log.DebugMode
@@ -58,8 +60,6 @@ func (server *Server) Start() error {
 	if server.PrintRoutes {
 		server.printRoutes()
 	}
-
-	jobqueue.Default().Start(server.JobQueuePoolSize, server.JobQueueConcurrency)
 
 	port := server.port()
 	return server.engine.Start(port)

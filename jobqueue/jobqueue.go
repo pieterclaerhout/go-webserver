@@ -20,9 +20,9 @@ func Default() JobQueue {
 	return JobQueue{}
 }
 
-func (jobQueue JobQueue) Start(pool int, concurrent int) {
-	log.Info("⇨ Starting job queue, pool size:", pool, "concurrency:", concurrent)
-	jobrunner.Start(pool, concurrent)
+func (jobQueue JobQueue) Start(poolSize int, concurrency int) {
+	log.Info("⇨ Starting job queue, pool size:", poolSize, "concurrency:", concurrency)
+	jobrunner.Start(poolSize, concurrency)
 }
 
 func (jobQueue JobQueue) Stop() {
