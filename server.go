@@ -12,14 +12,17 @@ import (
 	"github.com/labstack/echo/middleware"
 
 	"github.com/pieterclaerhout/go-log"
+	"github.com/pieterclaerhout/go-webserver/jobqueue"
 )
 
 // Server is an abstraction of a webserver
 type Server struct {
-	engine      *echo.Echo
-	DefaultPort string
-	PrintRoutes bool
-	modules     []Module
+	engine              *echo.Echo
+	DefaultPort         string
+	PrintRoutes         bool
+	JobQueuePoolSize    int
+	JobQueueConcurrency int
+	modules             []Module
 }
 
 // New returns a new Server instacce
@@ -29,8 +32,10 @@ func New() *Server {
 	log.PrintTimestamp = true
 
 	return &Server{
-		DefaultPort: ":8080",
-		modules:     []Module{},
+		DefaultPort:         ":8080",
+		modules:             []Module{},
+		JobQueuePoolSize:    10,
+		JobQueueConcurrency: 4,
 	}
 
 }
@@ -54,6 +59,8 @@ func (server *Server) Start() error {
 		server.printRoutes()
 	}
 
+	jobqueue.Default().Start(server.JobQueuePoolSize, server.JobQueueConcurrency)
+
 	port := server.port()
 	return server.engine.Start(port)
 
@@ -61,11 +68,16 @@ func (server *Server) Start() error {
 
 // Stop stops the server and performs the shutdown action for each module
 func (server *Server) Stop() error {
+
+	jobqueue.Default().Stop()
+
 	for _, module := range server.modules {
 		module.Register(server.engine)
 		module.Stop()
 	}
+
 	return server.engine.Close()
+
 }
 
 // Register registers the modules on the main router
