@@ -8,6 +8,7 @@ import (
 	"reflect"
 	"runtime"
 	"strings"
+	stdLog "log"
 	"syscall"
 
 	"github.com/labstack/echo"
@@ -53,9 +54,7 @@ func (server *Server) setupShutdownHook() {
 		select {
 		case <-signalChan:
 			fmt.Println()
-			err := server.Stop()
-			log.CheckError(err)
-			os.Exit(0)
+			server.Stop()
 		}
 	}()
 
@@ -69,10 +68,12 @@ func (server *Server) Start() error {
 	jobqueue.Default().Start(server.JobQueuePoolSize, server.JobQueueConcurrency)
 
 	server.engine = echo.New()
+	server.engine.Logger = NewLogger()
+	server.engine.StdLogger = stdLog.New(server.engine.Logger.Output(), server.engine.Logger.Prefix()+": ", 0)
 	server.engine.HideBanner = true
+	// server.engine.HidePort = true
 	server.engine.Debug = log.DebugMode
 	server.engine.HTTPErrorHandler = server.handleError
-	// server.engine.Logger = nil
 
 	for _, module := range server.modules {
 		log.Debug("Starting module:", xray.Name(module))
@@ -88,12 +89,17 @@ func (server *Server) Start() error {
 
 	port := server.port()
 	log.Debug("Starting webserver on port:", port)
-	return server.engine.Start(port)
+
+	err := server.engine.Start(port)
+	if err == http.ErrServerClosed {
+		return nil
+	}
+	return err
 
 }
 
 // Stop stops the server and performs the shutdown action for each module
-func (server *Server) Stop() error {
+func (server *Server) Stop() {
 
 	log.Debug(("Stopping background task queue"))
 	jobqueue.Default().Stop()
@@ -105,7 +111,7 @@ func (server *Server) Stop() error {
 	}
 
 	log.Debug("Stopping webserver")
-	return server.engine.Close()
+	server.engine.Close()
 
 }
 
