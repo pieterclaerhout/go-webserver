@@ -1,35 +1,20 @@
-package webserver
+package middleware
 
 import (
 	"fmt"
 	"strings"
 
 	"github.com/labstack/echo"
-	"github.com/labstack/echo/middleware"
+	echomw "github.com/labstack/echo/middleware"
 	"github.com/pieterclaerhout/go-log"
 )
 
-// LoggerConfig defines the logger config
-type LoggerConfig struct {
-	Skipper middleware.Skipper // The skipper function to use
-}
-
 // Logger returns the default logger
 func Logger() echo.MiddlewareFunc {
-	return LoggerWithConfig(LoggerConfig{})
-}
-
-// LoggerWithConfig returns a Logger middleware using go-log
-func LoggerWithConfig(config LoggerConfig) echo.MiddlewareFunc {
-
-	if config.Skipper == nil {
-		config.Skipper = middleware.DefaultLoggerConfig.Skipper
-	}
-
 	return func(next echo.HandlerFunc) echo.HandlerFunc {
 		return func(c echo.Context) (err error) {
 
-			if config.Skipper(c) {
+			if echomw.DefaultLoggerConfig.Skipper(c) {
 				return next(c)
 			}
 

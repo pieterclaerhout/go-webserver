@@ -72,6 +72,7 @@ func (server *Server) Start() error {
 	server.engine.HideBanner = true
 	server.engine.Debug = log.DebugMode
 	server.engine.HTTPErrorHandler = server.handleError
+	// server.engine.Logger = nil
 
 	for _, module := range server.modules {
 		log.Debug("Starting module:", xray.Name(module))
@@ -159,7 +160,7 @@ func (server *Server) registerMiddlewares() {
 	// 	Format: "${time_rfc3339} ${method} ${status} ${uri}\n",
 	// }))
 
-	server.engine.Use(Logger())
+	server.engine.Use(middleware.Logger())
 
 	server.engine.Use(middleware.CORSWithConfig(middleware.CORSConfig{
 		AllowOrigins: []string{"*"},
