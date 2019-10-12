@@ -4,15 +4,18 @@ import (
 	"fmt"
 	"net/http"
 	"os"
+	"os/signal"
 	"reflect"
 	"runtime"
 	"strings"
+	"syscall"
 
 	"github.com/labstack/echo"
 	"github.com/labstack/echo/middleware"
 
 	"github.com/pieterclaerhout/go-log"
 	"github.com/pieterclaerhout/go-webserver/jobqueue"
+	"github.com/pieterclaerhout/go-xray"
 )
 
 // Server is an abstraction of a webserver
@@ -40,8 +43,28 @@ func New() *Server {
 
 }
 
+// setupShutdownHook handles the shutdown of the server
+func (server *Server) setupShutdownHook() {
+
+	signalChan := make(chan os.Signal)
+	signal.Notify(signalChan, os.Interrupt, os.Kill, syscall.SIGTERM, syscall.SIGINT)
+
+	go func() {
+		select {
+		case <-signalChan:
+			fmt.Println()
+			err := server.Stop()
+			log.CheckError(err)
+			os.Exit(0)
+		}
+	}()
+
+}
+
 // Start starts the webserver on the indicated port
 func (server *Server) Start() error {
+
+	server.setupShutdownHook()
 
 	jobqueue.Default().Start(server.JobQueuePoolSize, server.JobQueueConcurrency)
 
@@ -51,6 +74,7 @@ func (server *Server) Start() error {
 	server.engine.HTTPErrorHandler = server.handleError
 
 	for _, module := range server.modules {
+		log.Debug("Starting module:", xray.Name(module))
 		module.Register(server.engine)
 		module.Start()
 	}
@@ -62,6 +86,7 @@ func (server *Server) Start() error {
 	}
 
 	port := server.port()
+	log.Debug("Starting webserver on port:", port)
 	return server.engine.Start(port)
 
 }
@@ -69,13 +94,16 @@ func (server *Server) Start() error {
 // Stop stops the server and performs the shutdown action for each module
 func (server *Server) Stop() error {
 
+	log.Debug(("Stopping background task queue"))
 	jobqueue.Default().Stop()
 
 	for _, module := range server.modules {
+		log.Debug("Stopping module:", xray.Name(module))
 		module.Register(server.engine)
 		module.Stop()
 	}
 
+	log.Debug("Stopping webserver")
 	return server.engine.Close()
 
 }
@@ -127,9 +155,11 @@ func (server *Server) registerMiddlewares() {
 		Level: 5,
 	}))
 
-	server.engine.Use(middleware.LoggerWithConfig(middleware.LoggerConfig{
-		Format: "${time_rfc3339} ${method} ${status} ${uri}\n",
-	}))
+	// server.engine.Use(middleware.LoggerWithConfig(middleware.LoggerConfig{
+	// 	Format: "${time_rfc3339} ${method} ${status} ${uri}\n",
+	// }))
+
+	server.engine.Use(Logger())
 
 	server.engine.Use(middleware.CORSWithConfig(middleware.CORSConfig{
 		AllowOrigins: []string{"*"},
