@@ -21,11 +21,12 @@ func Default() JobQueue {
 }
 
 func (jobQueue JobQueue) Start(poolSize int, concurrency int) {
-	log.Info("⇨ Starting job queue, pool size:", poolSize, "concurrency:", concurrency)
+	log.Info("Starting job queue, pool size:", poolSize, "concurrency:", concurrency)
 	jobrunner.Start(poolSize, concurrency)
 }
 
 func (jobQueue JobQueue) Stop() {
+	log.Info("Stopping job queue")
 	jobrunner.Stop()
 }
 
