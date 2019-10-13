@@ -2,13 +2,13 @@ package webserver
 
 import (
 	"fmt"
+	stdLog "log"
 	"net/http"
 	"os"
 	"os/signal"
 	"reflect"
 	"runtime"
 	"strings"
-	stdLog "log"
 	"syscall"
 
 	"github.com/labstack/echo"
@@ -68,7 +68,7 @@ func (server *Server) Start() error {
 	jobqueue.Default().Start(server.JobQueuePoolSize, server.JobQueueConcurrency)
 
 	server.engine = echo.New()
-	server.engine.Logger = NewLogger()
+	server.engine.Logger = newLogger()
 	server.engine.StdLogger = stdLog.New(server.engine.Logger.Output(), server.engine.Logger.Prefix()+": ", 0)
 	server.engine.HideBanner = true
 	// server.engine.HidePort = true

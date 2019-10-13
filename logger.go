@@ -9,136 +9,136 @@ import (
 	"github.com/pieterclaerhout/go-log"
 )
 
-type LogWriter struct{}
+type logWriter struct{}
 
-func (logWriter LogWriter) Write(p []byte) (n int, err error) {
+func (w logWriter) Write(p []byte) (n int, err error) {
 	log.Info(string(p))
 	return len(p), nil
 }
 
-type Logger struct {
+type logger struct {
 	w      io.Writer
 	prefix string
 	level  glog.Lvl
 }
 
-func NewLogger() Logger {
-	return Logger{
-		w:      LogWriter{},
+func newLogger() logger {
+	return logger{
+		w:      logWriter{},
 		prefix: "",
 		level:  glog.Lvl(2),
 	}
 }
 
-func (logger Logger) Output() io.Writer {
-	return logger.w
+func (l logger) Output() io.Writer {
+	return l.w
 }
 
-func (logger Logger) SetOutput(w io.Writer) {
-	logger.w = w
+func (l logger) SetOutput(w io.Writer) {
+	l.w = w
 }
 
-func (logger Logger) Prefix() string {
-	return logger.prefix
+func (l logger) Prefix() string {
+	return l.prefix
 }
 
-func (logger Logger) SetPrefix(p string) {
-	logger.prefix = p
+func (l logger) SetPrefix(p string) {
+	l.prefix = p
 }
 
-func (logger Logger) Level() glog.Lvl {
-	return logger.level
+func (l logger) Level() glog.Lvl {
+	return l.level
 }
 
-func (logger Logger) SetLevel(v glog.Lvl) {
-	logger.level = v
+func (l logger) SetLevel(v glog.Lvl) {
+	l.level = v
 }
 
-func (logger Logger) SetHeader(h string) {
+func (l logger) SetHeader(h string) {
 }
 
-func (logger Logger) Print(i ...interface{}) {
+func (l logger) Print(i ...interface{}) {
 	log.Info(i...)
 }
 
-func (logger Logger) Printf(format string, args ...interface{}) {
+func (l logger) Printf(format string, args ...interface{}) {
 	log.Infof(format, args...)
 }
 
-func (logger Logger) Printj(j glog.JSON) {
-	log.Info(logger.jsonToString(j))
+func (l logger) Printj(j glog.JSON) {
+	log.Info(l.jsonToString(j))
 }
 
-func (logger Logger) Debug(i ...interface{}) {
+func (l logger) Debug(i ...interface{}) {
 	log.Debug(i...)
 }
 
-func (logger Logger) Debugf(format string, args ...interface{}) {
+func (l logger) Debugf(format string, args ...interface{}) {
 	log.Debugf(format, args...)
 }
 
-func (logger Logger) Debugj(j glog.JSON) {
-	log.Debug(logger.jsonToString(j))
+func (l logger) Debugj(j glog.JSON) {
+	log.Debug(l.jsonToString(j))
 }
 
-func (logger Logger) Info(i ...interface{}) {
+func (l logger) Info(i ...interface{}) {
 	log.Info(i...)
 }
 
-func (logger Logger) Infof(format string, args ...interface{}) {
+func (l logger) Infof(format string, args ...interface{}) {
 	log.Infof(format, args...)
 }
 
-func (logger Logger) Infoj(j glog.JSON) {
-	log.Info(logger.jsonToString(j))
+func (l logger) Infoj(j glog.JSON) {
+	log.Info(l.jsonToString(j))
 }
 
-func (logger Logger) Warn(i ...interface{}) {
+func (l logger) Warn(i ...interface{}) {
 	log.Warn(i...)
 }
 
-func (logger Logger) Warnf(format string, args ...interface{}) {
+func (l logger) Warnf(format string, args ...interface{}) {
 	log.Warnf(format, args...)
 }
 
-func (logger Logger) Warnj(j glog.JSON) {
-	log.Warn(logger.jsonToString(j))
+func (l logger) Warnj(j glog.JSON) {
+	log.Warn(l.jsonToString(j))
 }
 
-func (logger Logger) Error(i ...interface{}) {
+func (l logger) Error(i ...interface{}) {
 	log.Error(i...)
 }
 
-func (logger Logger) Errorf(format string, args ...interface{}) {
+func (l logger) Errorf(format string, args ...interface{}) {
 	log.Errorf(format, args...)
 }
 
-func (logger Logger) Errorj(j glog.JSON) {
-	log.Error(logger.jsonToString(j))
+func (l logger) Errorj(j glog.JSON) {
+	log.Error(l.jsonToString(j))
 }
 
-func (logger Logger) Fatal(i ...interface{}) {
+func (l logger) Fatal(i ...interface{}) {
 	log.Fatal(i...)
 }
 
-func (logger Logger) Fatalj(j glog.JSON) {
-	log.Fatal(logger.jsonToString(j))
+func (l logger) Fatalj(j glog.JSON) {
+	log.Fatal(l.jsonToString(j))
 }
 
-func (logger Logger) Fatalf(format string, args ...interface{}) {
+func (l logger) Fatalf(format string, args ...interface{}) {
 	log.Fatalf(format, args...)
 }
 
-func (logger Logger) Panic(i ...interface{}) {
+func (l logger) Panic(i ...interface{}) {
 }
 
-func (logger Logger) Panicj(j glog.JSON) {
+func (l logger) Panicj(j glog.JSON) {
 }
 
-func (logger Logger) Panicf(format string, args ...interface{}) {
+func (l logger) Panicf(format string, args ...interface{}) {
 }
 
-func (logger Logger) jsonToString(j glog.JSON) string {
+func (l logger) jsonToString(j glog.JSON) string {
 	log.InfoDump(j, "")
 	b, err := json.Marshal(j)
 	if err != nil {
