@@ -130,12 +130,15 @@ func (l logger) Fatalf(format string, args ...interface{}) {
 }
 
 func (l logger) Panic(i ...interface{}) {
+	// Not implemented
 }
 
 func (l logger) Panicj(j glog.JSON) {
+	// Not implemented
 }
 
 func (l logger) Panicf(format string, args ...interface{}) {
+	// Not implemented
 }
 
 func (l logger) jsonToString(j glog.JSON) string {

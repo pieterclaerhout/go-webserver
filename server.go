@@ -3,6 +3,7 @@ package webserver
 import (
 	"fmt"
 	stdLog "log"
+	"net"
 	"net/http"
 	"os"
 	"os/signal"
@@ -16,6 +17,7 @@ import (
 
 	"github.com/pieterclaerhout/go-log"
 	"github.com/pieterclaerhout/go-webserver/jobqueue"
+	wsmiddleware "github.com/pieterclaerhout/go-webserver/middleware"
 	"github.com/pieterclaerhout/go-xray"
 )
 
@@ -24,6 +26,7 @@ type Server struct {
 	engine              *echo.Echo
 	DefaultPort         string
 	PrintRoutes         bool
+	UseJobQueue         bool
 	JobQueuePoolSize    int
 	JobQueueConcurrency int
 	modules             []Module
@@ -38,6 +41,7 @@ func New() *Server {
 	return &Server{
 		DefaultPort:         ":8080",
 		modules:             []Module{},
+		UseJobQueue:         true,
 		JobQueuePoolSize:    10,
 		JobQueueConcurrency: 4,
 	}
@@ -62,16 +66,26 @@ func (server *Server) setupShutdownHook() {
 
 // Start starts the webserver on the indicated port
 func (server *Server) Start() error {
+	return server.StartWithListener(nil)
+}
+
+// StartWithListener starts the webserver using the given listener
+func (server *Server) StartWithListener(listener net.Listener) error {
 
 	server.setupShutdownHook()
 
-	jobqueue.Default().Start(server.JobQueuePoolSize, server.JobQueueConcurrency)
+	if server.UseJobQueue {
+		jobqueue.Default().Start(server.JobQueuePoolSize, server.JobQueueConcurrency)
+	}
 
 	server.engine = echo.New()
+	if listener != nil {
+		server.engine.Listener = listener
+		server.engine.HidePort = true
+	}
 	server.engine.Logger = newLogger()
 	server.engine.StdLogger = stdLog.New(server.engine.Logger.Output(), server.engine.Logger.Prefix()+": ", 0)
 	server.engine.HideBanner = true
-	// server.engine.HidePort = true
 	server.engine.Debug = log.DebugMode
 	server.engine.HTTPErrorHandler = server.handleError
 
@@ -101,8 +115,10 @@ func (server *Server) Start() error {
 // Stop stops the server and performs the shutdown action for each module
 func (server *Server) Stop() {
 
-	log.Debug(("Stopping background task queue"))
-	jobqueue.Default().Stop()
+	if server.UseJobQueue {
+		log.Debug(("Stopping background task queue"))
+		jobqueue.Default().Stop()
+	}
 
 	for _, module := range server.modules {
 		log.Debug("Stopping module:", xray.Name(module))
@@ -162,11 +178,7 @@ func (server *Server) registerMiddlewares() {
 		Level: 5,
 	}))
 
-	// server.engine.Use(middleware.LoggerWithConfig(middleware.LoggerConfig{
-	// 	Format: "${time_rfc3339} ${method} ${status} ${uri}\n",
-	// }))
-
-	server.engine.Use(middleware.Logger())
+	server.engine.Use(wsmiddleware.Logger())
 
 	server.engine.Use(middleware.CORSWithConfig(middleware.CORSConfig{
 		AllowOrigins: []string{"*"},

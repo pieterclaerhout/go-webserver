@@ -9,6 +9,8 @@ import (
 	"github.com/pieterclaerhout/go-webserver/jobqueue/jobrunner"
 )
 
+const prefixRunningJob = "Running job"
+
 type JobQueue struct{}
 
 type JobEntry interface {
@@ -35,22 +37,22 @@ func (jobQueue JobQueue) Remove(id cron.EntryID) {
 }
 
 func (jobQueue JobQueue) Now(job JobEntry) {
-	log.Info("Running job:", job.Name(), "immediately")
+	log.Info(prefixRunningJob, job.Name(), "immediately")
 	jobrunner.Now(job)
 }
 
 func (jobQueue JobQueue) In(duration time.Duration, job JobEntry) {
-	log.Info("Running job", job.Name(), "in:", duration)
+	log.Info(prefixRunningJob, job.Name(), "in:", duration)
 	jobrunner.In(duration, job)
 }
 
 func (jobQueue JobQueue) Every(duration time.Duration, job JobEntry) {
-	log.Info("Running job", job.Name(), "every:", duration)
+	log.Info(prefixRunningJob, job.Name(), "every:", duration)
 	jobrunner.Every(duration, job)
 }
 
 func (jobQueue JobQueue) Schedule(spec string, job JobEntry) error {
-	log.Info("Running job", job.Name(), "schedule:", spec)
+	log.Info(prefixRunningJob, job.Name(), "schedule:", spec)
 	return jobrunner.Schedule(spec, job)
 }
 
