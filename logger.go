@@ -55,6 +55,7 @@ func (l logger) SetLevel(v glog.Lvl) {
 }
 
 func (l logger) SetHeader(h string) {
+	// Not implemented
 }
 
 func (l logger) Print(i ...interface{}) {
