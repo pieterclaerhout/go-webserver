@@ -122,7 +122,6 @@ func (server *Server) Stop() {
 
 	for _, module := range server.modules {
 		log.Debug("Stopping module:", xray.Name(module))
-		module.Register(server.engine)
 		module.Stop()
 	}
 
