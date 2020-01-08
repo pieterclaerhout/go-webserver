@@ -37,6 +37,10 @@ func Logger() echo.MiddlewareFunc {
 				logFunction = log.Warn
 			}
 
+			if n == 304 {
+				logFunction = log.Info
+			}
+
 			var buf strings.Builder
 			buf.WriteString(req.Method)
 			buf.WriteString(" ")
