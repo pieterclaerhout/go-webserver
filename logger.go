@@ -5,7 +5,6 @@ import (
 	"io"
 
 	glog "github.com/labstack/gommon/log"
-
 	"github.com/pieterclaerhout/go-log"
 )
 
