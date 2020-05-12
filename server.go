@@ -177,6 +177,17 @@ func (server *Server) registerMiddlewares() {
 		Level: 5,
 	}))
 
+	middleware.DefaultLoggerConfig = middleware.LoggerConfig{
+		Skipper: func(c echo.Context) bool {
+			switch c.Request().RequestURI {
+			case "/status", "/favicon.ico":
+				return true
+			default:
+				return false
+			}
+		},
+	}
+
 	server.engine.Use(wsmiddleware.Logger())
 
 	server.engine.Use(middleware.CORSWithConfig(middleware.CORSConfig{
