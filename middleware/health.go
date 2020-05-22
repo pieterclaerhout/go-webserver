@@ -4,6 +4,7 @@ import (
 	"net/http"
 	"strings"
 
+	"github.com/pieterclaerhout/go-log"
 	"github.com/pieterclaerhout/go-webserver/respond"
 )
 
@@ -12,6 +13,7 @@ import (
 // can make a request before hitting any routes. It's also convenient
 // to place this above ACL middlewares as well.
 func Health(endpoint string) func(http.Handler) http.Handler {
+	log.Debug("Registering health endpoint:", endpoint)
 	return func(h http.Handler) http.Handler {
 		fn := func(w http.ResponseWriter, r *http.Request) {
 			if r.Method == "GET" && strings.EqualFold(r.URL.Path, endpoint) {

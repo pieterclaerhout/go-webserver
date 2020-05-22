@@ -12,6 +12,7 @@ import (
 
 // Logger returns the logging middleware
 func Logger(next http.Handler) http.Handler {
+	log.Debug("Registering logger")
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 
 		ri := parseRequestInfo(r)

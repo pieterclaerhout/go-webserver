@@ -2,6 +2,7 @@ package respond
 
 import (
 	"encoding/json"
+	"fmt"
 	"net/http"
 )
 
@@ -13,7 +14,7 @@ func (resp Response) Write(w http.ResponseWriter, r *http.Request) error {
 		return nil
 	}
 
-	accepts := ParseAccept(r.Header.Get("Accept"))
+	accepts := parseAccept(r.Header.Get("Accept"))
 	for _, accept := range accepts {
 		switch accept.SubType {
 		case "html", "xhtml", "xhtml+xml":
@@ -31,7 +32,7 @@ func (resp Response) Write(w http.ResponseWriter, r *http.Request) error {
 func (resp Response) ToText(w http.ResponseWriter) error {
 	w.Header().Set("Content-Type", "text/plain")
 	w.WriteHeader(resp.StatusCode)
-	_, err := w.Write(asBytes(resp.Body))
+	_, err := w.Write([]byte(fmt.Sprintf("%v", resp.Body)))
 	return err
 }
 
