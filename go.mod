@@ -1,13 +1,10 @@
 module github.com/pieterclaerhout/go-webserver
 
-go 1.13
+go 1.14
 
 require (
-	github.com/labstack/echo v3.3.10+incompatible
-	github.com/labstack/gommon v0.3.0
-	github.com/pieterclaerhout/go-geoip v1.1.0
-	github.com/pieterclaerhout/go-html v0.0.1 // indirect
-	github.com/pieterclaerhout/go-log v1.0.9
-	github.com/pieterclaerhout/go-xray v1.0.2
-	github.com/robfig/cron/v3 v3.0.1
+	github.com/felixge/httpsnoop v1.0.1
+	github.com/go-chi/chi v4.1.1+incompatible
+	github.com/markusthoemmes/goautoneg v0.0.0-20190713162725-c6008fefa5b1
+	github.com/pieterclaerhout/go-log v1.11.0
 )

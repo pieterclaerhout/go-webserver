@@ -1,21 +1,95 @@
 {
-    // See https://go.microsoft.com/fwlink/?LinkId=733558
-    // for the documentation about the tasks.json format
     "version": "2.0.0",
     "tasks": [
         {
-            "label": "go-webserver: build",
+            "label": "go-webserver | build",
+            "command": "go-james build -v",
             "type": "shell",
-            "command": "make build",
             "group": "build",
-            "problemMatcher": ["$go"]
+            "problemMatcher": [
+                "$go"
+            ]
         },
         {
-            "label": "go-webserver: run",
+            "label": "go-webserver | build darwin/amd64",
+            "command": "go-james build -v --goos=darwin --goarch=amd64",
             "type": "shell",
-            "command": "make run",
             "group": "build",
-            "problemMatcher": ["$go"]
+            "problemMatcher": [
+                "$go"
+            ]
+        },
+        {
+            "label": "go-webserver | build linux/amd64",
+            "command": "go-james build -v --goos=linux --goarch=amd64",
+            "type": "shell",
+            "group": "build",
+            "problemMatcher": [
+                "$go"
+            ]
+        },
+        {
+            "label": "go-webserver | build windows/amd64",
+            "command": "go-james build -v --goos=windows --goarch=amd64",
+            "type": "shell",
+            "group": "build",
+            "problemMatcher": [
+                "$go"
+            ]
+        },
+        {
+            "label": "go-webserver | clean",
+            "command": "go-james clean",
+            "type": "shell",
+            "group": "build",
+            "problemMatcher": [
+                "$go"
+            ]
+        },
+        {
+            "label": "go-webserver | tests",
+            "command": "go-james test",
+            "type": "shell",
+            "group": "build",
+            "problemMatcher": [
+                "$go"
+            ]
+        },
+        {
+            "label": "go-webserver | run",
+            "command": "go-james run",
+            "type": "shell",
+            "group": "build",
+            "problemMatcher": [
+                "$go"
+            ]
+        },
+        {
+            "label": "go-webserver | install",
+            "command": "go-james install",
+            "type": "shell",
+            "group": "build",
+            "problemMatcher": [
+                "$go"
+            ]
+        },
+        {
+            "label": "go-webserver | uninstall",
+            "command": "go-james uninstall",
+            "type": "shell",
+            "group": "build",
+            "problemMatcher": [
+                "$go"
+            ]
+        },
+        {
+            "label": "go-webserver | run (debug)",
+            "command": "DEBUG=1 go-james run",
+            "type": "shell",
+            "group": "build",
+            "problemMatcher": [
+                "$go"
+            ]
         }
     ]
 }

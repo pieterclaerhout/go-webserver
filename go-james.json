@@ -1,0 +1,32 @@
+{
+    "project": {
+        "name": "go-webserver",
+        "version": "2.0.0",
+        "description": "A generic web framework for Go",
+        "copyright": "Pieter Claerhout",
+        "main_package": "github.com/pieterclaerhout/go-webserver/cmd/go-webserver"
+    },
+    "build": {
+        "output_path": "build",
+        "ld_flags": [
+            "-s",
+            "-w"
+        ],
+        "ld_flags_darwin": [],
+        "ld_flags_linux": [],
+        "ld_flags_windows": [],
+        "extra_args": [
+            "-trimpath"
+        ],
+        "use_gotip": false
+    },
+    "package": {
+        "include_readme": true
+    },
+    "run": {
+        "environ": {}
+    },
+    "test": {
+        "extra_args": []
+    }
+}
