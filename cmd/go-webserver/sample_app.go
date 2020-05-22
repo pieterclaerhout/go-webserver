@@ -5,7 +5,7 @@ import (
 
 	"github.com/go-chi/chi"
 	"github.com/pieterclaerhout/go-log/versioninfo"
-	"github.com/pieterclaerhout/go-webserver/respond"
+	"github.com/pieterclaerhout/go-webserver/v2/respond"
 )
 
 // SampleApp defines a sample web application

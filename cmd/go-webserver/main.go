@@ -4,7 +4,7 @@ import (
 	"os"
 
 	"github.com/pieterclaerhout/go-log"
-	webserver "github.com/pieterclaerhout/go-webserver"
+	webserver "github.com/pieterclaerhout/go-webserver/v2"
 )
 
 func main() {

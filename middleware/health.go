@@ -5,7 +5,7 @@ import (
 	"strings"
 
 	"github.com/pieterclaerhout/go-log"
-	"github.com/pieterclaerhout/go-webserver/respond"
+	"github.com/pieterclaerhout/go-webserver/v2/respond"
 )
 
 // Health endpoint middleware useful to setting up a path like

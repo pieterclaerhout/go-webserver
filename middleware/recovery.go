@@ -4,7 +4,7 @@ import (
 	"net/http"
 
 	"github.com/pieterclaerhout/go-log"
-	"github.com/pieterclaerhout/go-webserver/respond"
+	"github.com/pieterclaerhout/go-webserver/v2/respond"
 )
 
 // Recovery returns the Recovery middleware

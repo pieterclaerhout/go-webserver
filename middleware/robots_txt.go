@@ -5,7 +5,7 @@ import (
 	"strings"
 
 	"github.com/pieterclaerhout/go-log"
-	"github.com/pieterclaerhout/go-webserver/respond"
+	"github.com/pieterclaerhout/go-webserver/v2/respond"
 )
 
 const robotsTxtPath = "/robots.txt"

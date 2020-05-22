@@ -4,7 +4,7 @@
         "version": "2.0.0",
         "description": "A generic web framework for Go",
         "copyright": "Pieter Claerhout",
-        "main_package": "github.com/pieterclaerhout/go-webserver/cmd/go-webserver"
+        "main_package": "github.com/pieterclaerhout/go-webserver/v2/cmd/go-webserver"
     },
     "build": {
         "output_path": "build",

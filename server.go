@@ -5,7 +5,7 @@ import (
 
 	"github.com/go-chi/chi"
 	"github.com/pieterclaerhout/go-log"
-	"github.com/pieterclaerhout/go-webserver/middleware"
+	"github.com/pieterclaerhout/go-webserver/v2/middleware"
 )
 
 const port = ":8080"

@@ -1,4 +1,4 @@
-module github.com/pieterclaerhout/go-webserver
+module github.com/pieterclaerhout/go-webserver/v2
 
 go 1.14
 
@@ -7,4 +7,5 @@ require (
 	github.com/go-chi/chi v4.1.1+incompatible
 	github.com/markusthoemmes/goautoneg v0.0.0-20190713162725-c6008fefa5b1
 	github.com/pieterclaerhout/go-log v1.11.0
+	github.com/pieterclaerhout/go-webserver v1.0.6
 )
