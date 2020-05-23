@@ -5,6 +5,7 @@ import (
 
 	"github.com/go-chi/chi"
 	"github.com/pieterclaerhout/go-log/versioninfo"
+	"github.com/pieterclaerhout/go-webserver/v2/binder"
 	"github.com/pieterclaerhout/go-webserver/v2/respond"
 )
 
@@ -24,6 +25,8 @@ func (a *SampleApp) Register(r *chi.Mux) {
 	r.Get("/html", a.handleHTML())
 	r.Get("/text", a.handleText())
 	r.Get("/auto", a.handleAuto())
+	r.Get("/parse", a.handleParse())
+	r.Post("/parse", a.handleParse())
 
 	r.NotFound(a.handleNotFound())
 	r.MethodNotAllowed(a.handleMethodNotAllowed())
@@ -52,6 +55,26 @@ func (a *SampleApp) handleAuto() http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		a.sampleResponse().Write(w, r)
 	}
+}
+
+func (a *SampleApp) handleParse() http.HandlerFunc {
+
+	type request struct {
+		Value string `json:"value" form:"value"`
+	}
+
+	return func(w http.ResponseWriter, r *http.Request) {
+
+		req := &request{}
+		if err := binder.Bind(r, &req); err != nil {
+			respond.Error(err).Write(w, r)
+			return
+		}
+
+		respond.OK(req).ToJSON(w)
+
+	}
+
 }
 
 func (a *SampleApp) handleNotFound() http.HandlerFunc {
