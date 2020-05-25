@@ -2,6 +2,8 @@ package respond
 
 import (
 	"net/http"
+
+	"github.com/pieterclaerhout/go-log"
 )
 
 // Response is used for a HTTP response
@@ -44,6 +46,7 @@ func MethodNotAllowed(message string) *Response {
 
 // Error is used to send a HTTP response with a generic status code
 func Error(err error) *Response {
+	log.StackTrace(err)
 	return ErrorWithCode(err.Error(), http.StatusInternalServerError)
 }
 

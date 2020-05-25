@@ -7,6 +7,7 @@ import (
 	"github.com/pieterclaerhout/go-log/versioninfo"
 	"github.com/pieterclaerhout/go-webserver/v2/binder"
 	"github.com/pieterclaerhout/go-webserver/v2/respond"
+	"github.com/pkg/errors"
 )
 
 // SampleApp defines a sample web application
@@ -27,6 +28,8 @@ func (a *SampleApp) Register(r *chi.Mux) {
 	r.Get("/auto", a.handleAuto())
 	r.Get("/parse", a.handleParse())
 	r.Post("/parse", a.handleParse())
+	r.Get("/error", a.handleError())
+	r.Get("/panic", a.handlePanic())
 
 	r.NotFound(a.handleNotFound())
 	r.MethodNotAllowed(a.handleMethodNotAllowed())
@@ -54,6 +57,18 @@ func (a *SampleApp) handleText() http.HandlerFunc {
 func (a *SampleApp) handleAuto() http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		a.sampleResponse().Write(w, r)
+	}
+}
+
+func (a *SampleApp) handleError() http.HandlerFunc {
+	return func(w http.ResponseWriter, r *http.Request) {
+		respond.Error(errors.New("an error")).ToJSON(w)
+	}
+}
+
+func (a *SampleApp) handlePanic() http.HandlerFunc {
+	return func(w http.ResponseWriter, r *http.Request) {
+		panic(errors.New("an error"))
 	}
 }
 

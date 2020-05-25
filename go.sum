@@ -31,6 +31,8 @@ github.com/pieterclaerhout/go-log v1.12.0 h1:TI2QXwHlgbrC15N0BuuxBj2CGlJuSwh4idn
 github.com/pieterclaerhout/go-log v1.12.0/go.mod h1:UQePEuzicHr/G7iW41zyc/I+kLJLjD11rSy+Qp1o5Ao=
 github.com/pieterclaerhout/go-log v1.13.0 h1:Jx12Ou5O7olkB48mD5IdqRWiYt5AHwfuLLDlz5LnDXw=
 github.com/pieterclaerhout/go-log v1.13.0/go.mod h1:Zwdhg00fN6IuEWDvktUpu/XFMC5Y+NWrXyQ1RQHRPjc=
+github.com/pieterclaerhout/go-log v1.14.0 h1:TWh+YvSWdqYeejB15pxa6S8p06kDDLCUz1nfNyqOJPo=
+github.com/pieterclaerhout/go-log v1.14.0/go.mod h1:Zwdhg00fN6IuEWDvktUpu/XFMC5Y+NWrXyQ1RQHRPjc=
 github.com/pkg/errors v0.8.1/go.mod h1:bwawxfHBFNV+L2hUp1rHADufV3IMtnDRdf1r5NINEl0=
 github.com/pkg/errors v0.9.1 h1:FEBLx1zS214owpjy7qsBeixbURkuhQAwrK5UwLGTwt4=
 github.com/pkg/errors v0.9.1/go.mod h1:bwawxfHBFNV+L2hUp1rHADufV3IMtnDRdf1r5NINEl0=
